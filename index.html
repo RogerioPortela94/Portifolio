@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogério Portela da Luz</title>
+    
+    <!-- css -->
+    <link rel="stylesheet" href="fonts/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fonts/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-switch-button.min.css">
+
+    <!-- javascript -->
+    <script src="js/bootstrap-switch-button.min.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+      .iconDark{
+        filter: grayscale(100%) invert(100%);
+      }
+      .iconLight{
+        filter: grayscale(100%) invert(0%);
+      }
+    </style>
+    <script>
+     
+      $(document).ready(function() {
+        
+        let key = 'darkMode';
+        /*Função do Dark Mode*/
+        $('#swtDarkMode').change(function() {
+          if($(this).prop('checked')){
+              document.documentElement.setAttribute('data-bs-theme', 'light');
+              $("#btnEnviar").removeClass("btn-dark");
+              $("#btnEnviar").addClass("btn-light");
+              $(".navbar").removeClass("bg-black");
+              $(".navbar").addClass("bg-light");
+              $("#txtLink").removeClass("text-white");
+              $("#txtLink").addClass("text-black");
+              $("#txtLink2").removeClass("text-white");
+              $("#txtLink2").addClass("text-black");
+              $("#iconesHabilidades").removeClass("iconDark");
+              $("#iconesHabilidades").addClass("iconLight");
+              localStorage.setItem(key, "on");
+            } else {
+              document.documentElement.setAttribute('data-bs-theme', 'dark');
+              $("#btnEnviar").addClass("btn-dark");
+              $("#btnEnviar").removeClass("btn-light");
+              $(".navbar").removeClass("bg-light");
+              $(".navbar").addClass("bg-black");
+              $("#txtLink").removeClass("text-black");
+              $("#txtLink").addClass("text-white");
+              $("#txtLink2").removeClass("text-black");
+              $("#txtLink2").addClass("text-white");
+              $("#iconesHabilidades").addClass("iconDark");
+              $("#iconesHabilidades").removeClass("iconLight");
+              localStorage.setItem(key, "off");
+            }
+        });
+
+        if(localStorage.getItem('darkMode') == "on"){
+          document.getElementById('swtDarkMode').switchButton('on');
+        }else if(localStorage.getItem('darkMode') == "off"){
+          document.getElementById('swtDarkMode').switchButton('off');
+        }
+        
+        /*Função da aba de menu*/
+        $(document).on('scroll', function() {
+          console.clear();
+          /*ativar aba Sobre*/
+          if ($(this).scrollTop() >= $('#sobre').height()  && $(this).scrollTop() < ($('#habilidades').position().top / 2) + ($('#habilidades').position().top/3)) {
+            $("#lnkSobre").addClass("active");
+            $("#lnkHabilidades").removeClass("active");
+            $("#lnkProjetos").removeClass("active");
+            $("#lnkContato").removeClass("active");
+          }
+          /*ativar aba Habilidades*/
+          else if ($(this).scrollTop() >= $('#habilidades').position().top / 1.5  && $(this).scrollTop() < ($('#projetos').position().top / 2) + ($('#projetos').position().top/3)) {
+            $("#lnkSobre").removeClass("active");
+            $("#lnkHabilidades").addClass("active");
+            $("#lnkProjetos").removeClass("active");
+            $("#lnkContato").removeClass("active");
+          }
+          /*ativar aba Projetos*/
+          else if ($(this).scrollTop() >= $('#projetos').position().top / 1.5 && $(this).scrollTop() < ($('#contato').position().top / 2) + ($('#contato').position().top/2.5)) {
+            $("#lnkSobre").removeClass("active");
+            $("#lnkHabilidades").removeClass("active");
+            $("#lnkProjetos").addClass("active");
+            $("#lnkContato").removeClass("active");
+          }
+          /*ativar aba Contato*/
+          else if ($(this).scrollTop() >= $('#contato').position().top / 1.5) {
+            $("#lnkSobre").removeClass("active");
+            $("#lnkHabilidades").removeClass("active");
+            $("#lnkProjetos").removeClass("active");
+            $("#lnkContato").addClass("active");
+          }
+          /*desativar todas as aba*/
+          else{
+            $("#lnkSobre").removeClass("active");
+            $("#lnkHabilidades").removeClass("active");
+            $("#lnkProjetos").removeClass("active");
+            $("#lnkContato").removeClass("active");
+          }
+        })
+
+        $('#modalAviso').modal('show');
+      });
+    
+    function enviarMensagem(){
+      
+    formulario = $("#frm_mensagem").serialize();
+     $.ajax({
+          url: 'php/enviarMensagem.php',
+          type: 'post',
+          data: formulario,
+          datatype: 'html',
+          cache: false,
+          beforeSend: function() {
+
+          }
+      }).done(function(msg) {
+          if (msg == "ok") {
+            $("#modalSucess").modal("toggle");
+          } else {
+            $("#modalFail").modal("toggle");
+          }
+      }).fail(function(jqXHR, textStatus, msg) {
+          alert(msg);
+      });
+    }
+    </script>
+</head>
+<body class="container">
+  <!--Cabeçalho-->
+  <header class="pb-5" id="menu">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" id="bMenu">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="" width="40" height="" alt="">
+                Rogério Portela da Luz
+            </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav nav-underline justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a id="lnkSobre" class="nav-link" aria-current="page" href="#sobre">Sobre</a>
+                </li>
+                <li class="nav-item">
+                  <a id="lnkHabilidades" class="nav-link" href="#habilidades">Habilidades</a>
+                </li>
+                <li class="nav-item">
+                  <a id="lnkProjetos" class="nav-link" href="#projetos">Projetos</a>
+                </li>
+                <li class="nav-item">
+                    <a id="lnkContato" class="nav-link" href="#contato">Contato</a>
+                </li>
+                
+              </ul>
+              <div class="py-2">
+                <input id="swtDarkMode" type="checkbox" data-toggle="switchbutton" data-size="xs" data-onstyle="light" data-offstyle="dark" checked data-onlabel="<i class='fa fa-sun-o'></i>" data-offlabel="<i class='fa fa-moon-o'></i>">
+              </div>
+              </div>
+          </div>
+        </div>
+    </nav>
+    
+  </header>
+
+  <!--Conteudo-->
+  <main class="container-flex py-lg-5">
+
+    <!--Apresentação-->
+    <section id="home">
+      <div class="col-xxl-8 px-4" >
+        <div class="row flex-lg-row align-items-center g-5">
+          <div class="col-10 col-sm-8 col-lg-6">
+            <img src="img/img1.png" class="d-block mx-lg-auto img-fluid" alt="" width="700" height="500" loading="lazy">
+          </div>
+          <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3 text-center">Olá, me chamo</h1>
+            <h3 class="display-6 fw-bold text-body-emphasis lh-1 mb-3 text-center">Rogério Portela da Luz</h3>
+            <p class="lead text-center">Desenvolvedor Web, Back-End, <br> Game Design Entusiasta</p>
+            <p class="lead text-center"> </p>
+          </div>
+        </div>
+      </div>
+    </section> 
+
+    <!--Sobre-->
+    <section id="sobre">
+      <div class="px-4 py-5 my-5 text-center  bg-body-tertiary" >
+        <img class="d-block mx-auto mb-4 rounded-circle" src="img/perfil.jpg" alt="" width="100" height="">
+        <h1 class="display-5 fw-bold py-4">Um pouco sobre mim</h1>
+        <div class="col-lg-8 mx-auto">
+          <p class="lead mb-4">Sou graduado em Sistemas de Informação pelo 
+            <a id="txtLink" href="https://uniao.ugv.edu.br/" class="text-black">
+              Centro Universitário Vale do Iguaçum - UGV 
+            </a> 
+            (2021) e pos-graduando em Engenharia de Software pela 
+            <a id="txtLink2" href="https://faveni.edu.br/" class="text-black">
+              Faculdade Venda Nova do Imigrante - FAVENI
+            </a>.
+            Sou apaixonado por Game Design e entusiasta da área. 
+            Desenvolvo tanto no front-end como no back-end, mas meu foco atual é no back-end. 
+            Gosto de estudar novas tecnologias. 
+            Atualmente estou estudando PHP(Laravel), Javascript, AJAX, JQuery, Postgresql, Java e C++ mais a fundo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!--Habilidades-->
+    <section id="habilidades">
+      <div class="px-4 py-5 my-5 text-center  bg-body-tertiary" >
+        <h1 class="display-5 fw-bold mb-5">Habilidades</h1>
+        <div class="col-lg-7 mx-auto">
+           <div id="iconesHabilidades" class="row iconLight">    
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Intermediário">
+                <img class="" src="img/logo/HTML5.png" alt="HTML5" width="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Estudando)">
+                <img class="" src="img/logo/CSS3.png" alt="CSS3" width="70" title="Intermediario">
+              </span>
+            </div>
+            <div class="col mx-lg-3 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Estudando)">
+                <img class="" src="img/logo/JavaScript.png" alt="JavaScript" width="70">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Intermediário">
+                <img class="" src="img/logo/PHP.png" alt="PHP" width="100" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Intermediário">
+                <img class="" src="img/logo/Bootstrap.png" alt="Bootstrap" width="120" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Intermediário">
+                <img class="" src="img/logo/PostgreSQL.png" alt="PostgreSQL" width="100" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Aprendendo mais)">
+                <img class="" src="img/logo/MySQL.png" alt="MySQL" width="100" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Aprendendo mais)">
+                <img class="" src="img/logo/Cpp.png" alt="C++" width="100" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4 ">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Aprendendo mais)">
+                <img class="" src="img/logo/GitHub.png" alt="GitHub" width="130">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Aprendendo mais)">
+                <img class="" src="img/logo/AWS.png" alt="AWS" width="100" height="110">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Intermediário">
+                <img class="" src="img/logo/jquery.png" alt="JQuery" width="90" height="90">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Básico (Aprendendo mais)">
+                <img class="" src="img/logo/Laravel.png" alt="Laravel" width="100" height="100">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Estudando">
+                <img class="" src="img/logo/Unreal_Engine.png" alt="Unreal Engine" width="" height="120">
+              </span>
+            </div>
+            <div class="col mx-lg-2 mb-4">
+              <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"  data-bs-placement="bottom" data-bs-content="Estudando">
+                <img class="" src="img/logo/Blender.png" alt="Blender" width="" height="120">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--Aba Projetos-->
+    <section id="projetos">
+      <div class="album py-5 bg-body-tertiary" >
+        
+        <div class="mb-5 text-center  bg-body-tertiary" >
+          <h1 class="display-6 fw-bold">O QUE SEI FAZER</h1>
+          <span>(EM BREVE)</span>
+        </div>
+
+        <div class="container">
+    
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+      <div class="album py-5 bg-body-tertiary" >
+        
+        <div class="mb-5 text-center  bg-body-tertiary" >
+          <h1 class="display-6 fw-bold">PROJETOS PESSOAIS</h1>
+          <span>(EM BREVE)</span>
+        </div>
+
+        <div class="container">
+    
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm">
+                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Projeto" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                <div class="card-body">
+                  <p class="card-text">Breve texto explicanto o projeto e tecnologias empregadas.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Download</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--Aba contato-->
+    <section id="contato">
+      <div class="px-4 py-5 my-5 text-center bg-body-tertiary">
+
+        <i class="d-block mx-auto mb-4 fa fa-envelope fa-3x" alt="" width="72" height="57"></i>
+        <h1 class="display-5 fw-bold text-body-emphasis">Entrar em contato</h1>
+        <div class="col-lg-6 mx-auto">
+          <form onsubmit="enviarMensagem(); return false;" class="p-4 p-md-5 border rounded-3 bg-body-secondary" id="frm_mensagem">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="txtNome" name="txtNome" placeholder="Nome" required>
+              <label for="floatingInput">Nome</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="txtAssunto" name="txtAssunto" placeholder="Assunto" required>
+              <label for="floatingInput">Assunto</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="name@example.com" required>
+              <label for="floatingInput">Email</label>
+            </div>
+            <div class="form-floating mb-3">
+              <textarea class="form-control" id="txtMensagem" name="txtMensagem" placeholder="Mensagem" style="height: 100px" rows="3" required></textarea>
+              <label for="floatingInput">Mensagem</label>
+            </div>
+            <button id="btnEnviar" class="w-100 btn btn-lg btn-light" type="submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer ms-auto py-3">
+    <div class="container">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+          <li class="ms-3"><a class="text-body-secondary" href="https://www.linkedin.com/in/rog%C3%A9rio-portela-619698181/"><i class="fa fa-2x fa-linkedin" ></i></a></li>
+          <li class="ms-3"><a class="text-body-secondary" href="https://github.com/RogerioPortela94"><i class="fa fa-2x fa-github"></i></a></li>
+          <li class="ms-3"><a class="text-body-secondary" href="https://www.facebook.com/rogerio.portela.547/"><i class="fa fa-2x fa-facebook-official"></i></a></li>
+      </ul>
+      <p class="text-center text-body-secondary">&copy; Rogério Portela da Luz, 2024</p>
+    </div>
+  </footer>
+
+  <!-- Modal para resposta de erro do envio da menssagem-->
+  <div class="modal fade" id="modalFail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-success-lighten">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="iconeModal"><i class="fa fa-thumbs-down" aria-hidden="true"></i></h5>
+          <h5 class="modal-title ms-auto fs-5" id="txtTitleModal"> Erro - Mensagem não enviada!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="txtRespostaModal" class="modal-body text-center">
+          Sinto muito!<br>
+          Infelizmente não foi possivel enviar a mensagem no momento.<br>
+          Aguarde e tente novamente mais tarde!<br>
+          Caso o erro persista entre em contato pelo email:<br>
+          rogerioporteladaluz@gmail.com<br><br>
+          <img src="img/danger.png " width="40" height="" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para resposta de sucesso do envio da menssagem-->
+  <div class="modal fade" id="modalSucess" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-success-lighten">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="iconeModal"><i class="fa fa-thumbs-up" aria-hidden="true"></i></h1>
+          <h5 class="modal-title ms-auto fs-5" id="txtTitleModal">Mensagem enviada!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="txtRespostaModal" class="modal-body text-center">
+          Obrigado!<br>
+          Responderei o mais breve possivel.<br><br>
+          <img src="img/success.png" width="40" height="" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Mensagem inicial-->
+  <div class="modal fade" id="modalAviso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title ms-auto fs-5" id="staticBackdropLabel">Atenção</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="text-center">O site ainda esta em desenvolvimento!</p><br>
+          <i class="fa fa-4x fa-cogs" aria-hidden="true"></i>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+  </script>
+</body>
+</html>
