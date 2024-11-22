@@ -1,5 +1,6 @@
 <?php
-    $para = "rogerioporteladaluz@gmail.com";
+    //configurar inf.php dento do xampp 
+    $para = "seuemail@email.com";
     $assunto = $_POST['txtAssunto'];
     $mensagem = wordwrap($_POST['txtMensagem'], 70,"\r\n");
     $nome = $_POST['txtNome']; 
